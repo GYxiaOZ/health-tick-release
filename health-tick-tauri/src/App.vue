@@ -1,21 +1,54 @@
 <template>
   <div class="app">
-    <MenuView />
+    <div v-if="currentView === 'menu'" class="view-container">
+      <MenuView />
+      <div class="view-nav">
+        <button class="nav-btn" @click="showSettings">
+          ⚙️ 设置
+        </button>
+        <button class="nav-btn" @click="showStats">
+          📊 统计
+        </button>
+      </div>
+    </div>
+    <div v-else-if="currentView === 'settings'" class="view-container">
+      <SettingsView :on-back="showMenu" />
+    </div>
+    <div v-else-if="currentView === 'stats'" class="view-container">
+      <StatsDetailView :on-back="showMenu" />
+    </div>
   </div>
 </template>
 
 <script>
-import { onMounted } from 'vue'
+import { onMounted, ref } from 'vue'
 import { useAppStore } from './store'
 import MenuView from './components/MenuView.vue'
+import SettingsView from './components/SettingsView.vue'
+import StatsDetailView from './components/StatsDetailView.vue'
 
 export default {
   name: 'App',
   components: {
-    MenuView
+    MenuView,
+    SettingsView,
+    StatsDetailView
   },
   setup() {
     const state = useAppStore()
+    const currentView = ref('menu')
+
+    const showMenu = () => {
+      currentView.value = 'menu'
+    }
+
+    const showSettings = () => {
+      currentView.value = 'settings'
+    }
+
+    const showStats = () => {
+      currentView.value = 'stats'
+    }
 
     onMounted(() => {
       // 初始化应用
@@ -28,7 +61,11 @@ export default {
     })
 
     return {
-      state
+      state,
+      currentView,
+      showMenu,
+      showSettings,
+      showStats
     }
   }
 }
@@ -53,5 +90,36 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  background-color: rgba(245, 245, 247, 0.95);
+  backdrop-filter: blur(10px);
+}
+
+.view-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.view-nav {
+  display: flex;
+  gap: 8px;
+  padding: 0 16px 16px;
+}
+
+.nav-btn {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  background-color: #f0f0f0;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.nav-btn:hover {
+  background-color: #e0e0e0;
 }
 </style>
