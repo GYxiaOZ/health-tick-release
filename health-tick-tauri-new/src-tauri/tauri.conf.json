@@ -1,6 +1,6 @@
 {
   "$schema": "../node_modules/@tauri-apps/cli/config.schema.json",
-  "productName": "health-tick-tauri",
+  "productName": "HealthTick",
   "version": "1.0.0",
   "identifier": "com.healthtick.app",
   "build": {
